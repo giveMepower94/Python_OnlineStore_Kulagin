@@ -1,2 +1,5 @@
 # Python_OnlineStore_Kulagin
-Разработка сайта  интернет-магазина
+Проект: Сайт интернет-магазина
+Кулагин Владимир
+giveMepower94
+Kul.vova2009@yandex.ru
