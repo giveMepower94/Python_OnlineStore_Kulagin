@@ -80,4 +80,3 @@ class OrderItem(models.Model):
     def total_price(self):
         """Общая цена этого товара в заказе."""
         return self.price * self.quantity
-
