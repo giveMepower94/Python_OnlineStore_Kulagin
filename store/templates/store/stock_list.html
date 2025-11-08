@@ -16,7 +16,7 @@
             {% for stock in stocks %}
             <tr>
                 <td>
-                    <!-- <a href="{% url 'product_detail' stock.product.pk %}">{{ stock.product.name }}</a> -->
+                    <a href="{% url 'stock_detail' stock.pk %}">{{ stock.product.name }}</a>
                 </td>
                 <td>
                     {% if stock.quantity > 5 %}

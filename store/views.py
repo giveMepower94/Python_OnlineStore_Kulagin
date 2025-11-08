@@ -19,7 +19,7 @@ class StockListView(ListView):
     model = Stock
     template_name = 'store/stock_list'
     context_object_name = 'stocks'
-    
+
     def get_queryset(self):
         return Stock.objects.all()
 
