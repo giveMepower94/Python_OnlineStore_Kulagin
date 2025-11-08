@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Корзина</h1>
+
+{% if object.items.all %}
+<table>
+    <tr>
+        <th>Товар</th>
+        <th>Количество</th>
+        <th>Цена за единицу</th>
+        <th>Итого</th>
+    </tr>
+
+    {% for item in object.items.all %}
+    <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.product.price }} ₽</td>
+        <td>{{ item.total_price }} ₽</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p><strong>Общая стоимость:</strong> 
+   {{ object.items.all|sum:"total_price" }} ₽ (мы потом заменим на order.total_price)
+</p>
+
+{% else %}
+<p>Корзина пуста.</p>
+{% endif %}
+
+{% endblock %}

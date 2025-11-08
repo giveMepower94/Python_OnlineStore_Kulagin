@@ -26,6 +26,15 @@ class Cart(models.Model):
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def add_item(self, product, quantity=1):
+        from .models import CartItem
+        item, created = CartItem.objects.get_or_create(cart=self, product=product)
+        if not created:
+            item.quantity += quantity
+        else:
+            item.quantity = quantity
+        item.save()
+
     def __str__(self):
         return f"Cart ({self.customer})"
 
