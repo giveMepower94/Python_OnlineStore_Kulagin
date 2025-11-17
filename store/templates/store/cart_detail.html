@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Корзина</h1>
 
-{% if object.items.all %}
+{% if object.items.exists %}
 <table>
     <tr>
         <th>Товар</th>
@@ -22,9 +22,7 @@
     {% endfor %}
 </table>
 
-<p><strong>Общая стоимость:</strong> 
-   {{ object.items.all|sum:"total_price" }} ₽ (мы потом заменим на order.total_price)
-</p>
+<p><strong>Общая стоимость:</strong> {{ object.total_price }} ₽</p>
 
 {% else %}
 <p>Корзина пуста.</p>
