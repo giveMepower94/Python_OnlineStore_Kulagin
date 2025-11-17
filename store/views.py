@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView, FormView
 from .models import Product, Stock, Cart, Order, OrderItem
 from django.urls import reverse_lazy
 from .forms import CartForm, OrderForm
+from django.shortcuts import render
 
 
 # Create your views here.
@@ -55,13 +56,13 @@ class CartDetailView(DetailView):
 
 
 class CreateOrderView(FormView):
-    template_name = 'order_create.html'
+    template_name = 'store/order_create.html'
     form_class = OrderForm
     success_url = reverse_lazy('order_success')
 
     def form_valid(self, form):
         user = self.request.user
-        cart = user.cart
+        cart = user.customer.cart
 
         # создаём заказ
         order = Order.objects.create(
@@ -89,5 +90,14 @@ class CreateOrderView(FormView):
 
         cart.items.all().delete()
 
-        return super().form_valid(form)
+        return render(self.request, 'store/order_success.html', {'order': order})
+
+
+class OrderDetailView(DetailView):
+    model = Order
+    template_name = 'store/order_detail.html'
+    context_object_name = 'order'
+
+    def get_queryset(self):
+        return Order.objects.filter(customer=self.request.user.customer)
 

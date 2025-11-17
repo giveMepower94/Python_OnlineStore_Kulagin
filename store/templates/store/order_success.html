@@ -13,5 +13,7 @@
     <a href="{% url 'product_list' %}" class="btn btn-primary">
         Вернуться к покупкам
     </a>
+
+    <a href="{% url 'order_detail' order.id %}">Перейти к заказу</a>
 </div>
 {% endblock %}
