@@ -3,40 +3,49 @@ from .models import Product, Stock, Cart, Order, OrderItem
 from django.urls import reverse_lazy
 from .forms import CartForm, OrderForm
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'store/product_list.html'
     context_object_name = 'products'
 
+    # перенаправление неавторизованных на страницу логина
+    login_url = '/users/login/'
+    redirect_field_name = 'next'
 
-class ProductDetailView(DetailView):
+
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'store/product_detail.html'
     context_object_name = 'product'
+    login_url = '/users/login/'
 
 
-class StockListView(ListView):
+class StockListView(LoginRequiredMixin, ListView):
     model = Stock
     template_name = 'store/stock_list'
     context_object_name = 'stocks'
+    login_url = '/users/login/'
 
     def get_queryset(self):
         return Stock.objects.all()
 
 
-class StockDetailView(DetailView):
+class StockDetailView(LoginRequiredMixin, DetailView):
     model = Stock
     template_name = 'store/stock_detail'
     context_object_name = 'stock'
+    login_url = '/users/login/'
 
 
-class AddToCartView(FormView):
+class AddToCartView(LoginRequiredMixin, FormView):
     form_class = CartForm
     template_name = 'store/add_to_cart.html'
     success_url = reverse_lazy('cart_detail')
+    login_url = '/users/login/'
 
     def form_valid(self, form):
         product = form.cleaned_data['product']
@@ -47,18 +56,20 @@ class AddToCartView(FormView):
         return super().form_valid(form)
 
 
-class CartDetailView(DetailView):
+class CartDetailView(LoginRequiredMixin, DetailView):
     model = Cart
     template_name = 'store/cart_detail.html'
+    login_url = '/users/login/'
 
     def get_object(self):
         return Cart.objects.get_or_create(customer=self.request.user.customer)
 
 
-class CreateOrderView(FormView):
+class CreateOrderView(LoginRequiredMixin, FormView):
     template_name = 'store/order_create.html'
     form_class = OrderForm
     success_url = reverse_lazy('order_success')
+    login_url = '/users/login/'
 
     def form_valid(self, form):
         user = self.request.user
@@ -93,11 +104,11 @@ class CreateOrderView(FormView):
         return render(self.request, 'store/order_success.html', {'order': order})
 
 
-class OrderDetailView(DetailView):
+class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'store/order_detail.html'
     context_object_name = 'order'
+    login_url = '/users/login/'
 
     def get_queryset(self):
         return Order.objects.filter(customer=self.request.user.customer)
-
