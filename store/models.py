@@ -89,3 +89,19 @@ class OrderItem(models.Model):
     def total_price(self):
         """Общая цена этого товара в заказе."""
         return self.price * self.quantity
+
+
+# Создаем модель для для
+# остатков товаров в файле models.py в приложении в Django.
+# Например stock_balance.
+class StockBalance(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='stock_balances')
+    quantity = models.PositiveIntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Остаток товара'
+        verbose_name_plural = 'Остатки товара'
+
+    def __str__(self):
+        return f"{self.product.name}:  {self.quantity} шт."
