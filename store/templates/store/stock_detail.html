@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}{{ stock.product.name }} на складе{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ stock.product.name }}</h1>
+
+    {% if stock.product.image %}
+        <img src="{{ stock.product.image.url }}" width="300" class="img-fluid mb-3">
+    {% endif %}
+
+    <p><strong>Описание:</strong> {{ stock.product.description }}</p>
+    <p><strong>Цена:</strong> {{ stock.product.price }} ₽</p>
+
+    <p>
+        <strong>Остаток на складе:</strong>
+        {% if stock.quantity > 5 %}
+            <span class="text-success">{{ stock.quantity }}</span>
+        {% elif stock.quantity > 0 %}
+            <span class="text-warning">{{ stock.quantity }}</span>
+        {% else %}
+            <span class="text-danger">Нет в наличии</span>
+        {% endif %}
+    </p>
+
+    <a href="{% url 'stock_list' %}" class="btn btn-secondary">Назад</a>
+    <a href="{% url 'product_detail' stock.product.pk %}" class="btn btn-primary">Перейти к товару</a>
+</div>
+{% endblock %}
